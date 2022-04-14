@@ -12,7 +12,9 @@ var server = http.createServer(function(req, res) {
     var q = url.parse(req.url, true);
     var url_radio = q.query.name;
     console.log(url_radio)
-  proxy.web(req, res, { target: url_radio});
+   if(url_radio != ''|| url_radio != undefined){
+    proxy.web(req, res, { target: url_radio});
+   }
 });
 
 console.log("listening on port "+port )
