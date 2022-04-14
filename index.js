@@ -1,29 +1,26 @@
-const express = require('express')
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const httpProxy = require('http-proxy');
+var http = require('http');
+var httpProxy = require('http-proxy');
 
-const proxy = httpProxy.createProxyServer({});
+var url = require('url');
 
-const app = express();
-const port = 4000;
+var proxy = httpProxy.createProxyServer({});
 
-// Where we will keep books
-let books = [];
+const port = process.env.PORT || 5050;
 
-app.use(cors());
 
-// Configuring body parser middleware
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-app.get('/', function (req, res) {
-  res.render('index', {});
+var server = http.createServer(function(req, res) {
+    var q = url.parse(req.url, true);
+    var url_radio = q.query.name;
+    console.log(url_radio)
+  proxy.web(req, res, { target: url_radio});
 });
 
-app.get('/book/:userId', (req, res) => {
-    // We will be coding here
-    proxy.web(req, res, { target: req.params.userId });
-});
+console.log("listening on port "+port )
+server.listen(process.env.PORT || 5050);
 
-app.listen(port, () => console.log(`Hello world app listening on port ${port}!`));
+server.on('error', function (err, req, res) {
+    res.writeHead(500, {
+      'Content-Type': 'text/plain'
+    });
+    res.end('Something went wrong. And we are reporting a custom error message.');
+  });
