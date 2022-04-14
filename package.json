@@ -10,7 +10,10 @@
   "author": "robby",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
     "http-proxy": "^1.18.1",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "url": "^0.11.0"
   }
 }

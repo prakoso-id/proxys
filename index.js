@@ -1,19 +1,29 @@
-var http = require('http'),
-    httpProxy = require('http-proxy');
-var proxy = httpProxy.createProxyServer({});
+const express = require('express')
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const httpProxy = require('http-proxy');
 
-const port = process.env.PORT || 5050;
+const proxy = httpProxy.createProxyServer({});
 
-//
-// Create your custom server and just call `proxy.web()` to proxy
-// a web request to the target passed in the options
-// also you can use `proxy.ws()` to proxy a websockets request
-//
-var server = http.createServer(function(req, res) {
-  // You can define here your custom logic to handle the request
-  // and then proxy the request.
-  proxy.web(req, res, { target: 'http://158.69.119.235:8018/stream' });
+const app = express();
+const port = 4000;
+
+// Where we will keep books
+let books = [];
+
+app.use(cors());
+
+// Configuring body parser middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.get('/', function (req, res) {
+  res.render('index', {});
 });
 
-console.log("listening on port "+port )
-server.listen(process.env.PORT || 5050);
+app.get('/book/:userId', (req, res) => {
+    // We will be coding here
+    proxy.web(req, res, { target: req.params.userId });
+});
+
+app.listen(port, () => console.log(`Hello world app listening on port ${port}!`));
