@@ -17,11 +17,8 @@ var server = http.createServer(function(req, res) {
       'Content-Type': 'text/plain'
     });
     res.end('Something went wrong. And we are reporting a custom error message.');
-
-
    }else{
     proxy.web(req, res, { target: url_radio});
-
    }
 });
 
